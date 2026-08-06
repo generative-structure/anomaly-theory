@@ -1,0 +1,24 @@
+# environments and caches
+.venv/
+__pycache__/
+*.pyc
+
+# manuscript sources and build artifacts are not distributed here
+paper/draft_t1.md
+paper/supplement_t.md
+paper/references.bib
+paper/_t_build.md
+paper/anomaly_theory.tex
+paper/anomaly_theory.pdf
+paper/*.aux
+paper/*.log
+paper/*.fls
+paper/*.fdb_latexmk
+paper/*.out
+paper/*.toc
+
+# scorer outputs
+paper/posthoc/cluster_paired/
+
+# OS
+.DS_Store

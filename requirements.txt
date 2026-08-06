@@ -1,0 +1,4 @@
+sympy>=1.12
+numpy>=1.26
+pandas>=2.0
+pypdf>=4.0   # optional: compiled-PDF metadata check in paper/style_gate.py
