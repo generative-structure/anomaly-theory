@@ -6,7 +6,6 @@ __pycache__/
 # manuscript sources and build artifacts are not distributed here
 paper/draft_t1.md
 paper/supplement_t.md
-paper/references.bib
 paper/_t_build.md
 paper/anomaly_theory.tex
 paper/anomaly_theory.pdf

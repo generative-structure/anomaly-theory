@@ -1,8 +1,9 @@
-# Replication scripts
+# Replication materials
 
 Verification and build scripts for the manuscript *What an Anomaly Means*
-(anonymous submission). This repository contains scripts only. No manuscript
-text, bibliography, figures, or data are included.
+(anonymous submission), together with the bibliography and the preregistration
+that the frozen scorer commits against. No manuscript text, figures, or data
+are included.
 
 All paths are relative to the repository root, and every script resolves its
 inputs and outputs relative to its own location.
@@ -15,6 +16,7 @@ paper/
   style_gate.py                       abstract length, spelling, dittography, PDF metadata
   check_references.py                 citation bijection: cited keys <-> bib entries
   check_xrefs.py                      cross-reference resolution within the document
+  references.bib                      34 entries, all cited; provenance line on each
   verification/
     u0_invariance_symbolic.py         refinement invariance, the non-f-divergence
                                       counterexample, canonical-pair construction,
@@ -25,7 +27,23 @@ paper/
                                       construction
   posthoc/
     cluster_paired.py                 cluster-aware paired bootstrap scorer (frozen)
+  prereg/
+    cluster_paired_uncertainty.md     the preregistration the scorer commits against
+    Response_to_cluster_paired_uncertainty.md
+                                      the review of it that revisions 2-4 apply
 ```
+
+## The preregistration
+
+`paper/posthoc/cluster_paired.py` and `paper/prereg/cluster_paired_uncertainty.md`
+commit together, before any run. The memo fixes every parameter the scorer
+uses, the comparisons, and the clause each interval licenses, so that no
+post-run discretion remains; the scorer holds those same values as module
+constants. Read them side by side — either one alone is only half the record.
+
+`Response_to_cluster_paired_uncertainty.md` is the review that the memo's
+revisions 2 through 4 respond to. Its numbered items are cited throughout the
+memo, so the revision history is not readable without it.
 
 ## Requirements
 
@@ -64,10 +82,10 @@ approval of the preregistered freeze.
 
 ## Running the build and the source gates
 
-`build_tex.py`, `style_gate.py`, `check_references.py`, and `check_xrefs.py`
-operate on the manuscript sources, which are not distributed here. Place
-`draft_t1.md` and `references.bib` in `paper/` and run from the repository
-root:
+`references.bib` is here, but `build_tex.py`, `style_gate.py`,
+`check_references.py`, and `check_xrefs.py` also read the manuscript source,
+which is not distributed here. Place `draft_t1.md` in `paper/` and run from the
+repository root:
 
 ```
 python paper/style_gate.py
