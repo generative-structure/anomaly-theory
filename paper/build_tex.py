@@ -40,6 +40,7 @@ PREAMBLE = r"""\documentclass[11pt]{article}
 \usepackage[colorlinks=true,linkcolor=black,urlcolor=blue,citecolor=black]{hyperref}
 \hypersetup{
   pdfauthor={},
+  pdftitle={What an Anomaly Means: Validity, Diagnosis, and the Limits of Semantic Identification},
   pdfsubject={},
   pdfcreator={},
   pdfkeywords={mechanism diagnosis; nonidentifiability; mixture models;
@@ -53,9 +54,12 @@ PREAMBLE = r"""\documentclass[11pt]{article}
   \par\medskip\noindent\textcolor{gray}{\rule{\linewidth}{0.4pt}}\par
   \nopagebreak\noindent{\footnotesize\textcolor{gray}{\textsf{#1}}}\par
   \nopagebreak\noindent\textcolor{gray}{\rule{\linewidth}{0.4pt}}\par\medskip}
-\title{\bfseries What an Anomaly Means\\[2pt]
-  \large\normalfont\itshape Working title}
-\author{Anonymous submission}
+\title{\bfseries What an Anomaly Means\\[4pt]
+  \large\normalfont Validity, Diagnosis, and the Limits of Semantic Identification}
+% The author block, affiliation, corresponding-author footnote and disclaimer
+% are not carried in this distributed copy. Fill them in here to build a named
+% submission; leave them empty for an anonymous one.
+\author{}
 \date{}
 % --- citeproc bibliography support -----------------------------------------
 % Verbatim from `pandoc --citeproc -s -t latex` (pandoc's own template block).
@@ -133,8 +137,13 @@ DIV_LABEL = {
 
 def preprocess(md: str) -> str:
     # title block is supplied by the preamble
-    md = re.sub(r"^# What an Anomaly Means\n+\*Working title\.\*\n+\*Anonymous submission\.\*\n",
-                "", md, flags=re.M)
+    # heading, plus any italic byline/affiliation lines under it
+    md, n_title = re.subn(
+        r"\A# What an Anomaly Means:[^\n]*\n(?:\s*\n\*[^\n]*\*\n)*",
+        "", md)
+    assert n_title == 1, (
+        "title block not stripped: the markdown heading, author line and "
+        "affiliation line must match the preamble's \\title/\\author")
     # seams become visible rules rather than being silently dropped as HTML
     def seam(m):
         body = m.group(1).strip()

@@ -8,9 +8,9 @@ four classes are checks now, and the build fails on violation.
   1. Abstract word count <= 250, counted from the markdown source.
   2. UK-spelling denylist over manuscript and supplement.
   3. Dittography scan (repeated adjacent word or word-pair, prose only).
-  4. PDF metadata: keywords present, author field empty. Checked at source
-     level in the generated preamble, and against the compiled PDF when one
-     is present.
+  4. PDF metadata: keywords present, author field equal to AUTHOR below.
+     Checked at source level in the generated preamble, and against the
+     compiled PDF when one is present.
 
 Run: .venv/bin/python paper/style_gate.py
 Exits non-zero on any violation. build_tex.py calls check_sources() and
@@ -28,6 +28,12 @@ TEX = HERE / "anomaly_theory.tex"
 PDF = HERE / "anomaly_theory.pdf"
 
 ABSTRACT_LIMIT = 250
+
+# The author the PDF metadata must name. Empty in this distributed copy, so the
+# check requires an empty author field — the anonymous-submission behavior. Set
+# it to the author's name and the check requires exactly that name instead, so
+# that dropping attribution from the archived PDF becomes a build failure.
+AUTHOR = ""
 
 # UK spellings and their inflections. The manuscript is US-spelled throughout;
 # these are the forms that have actually regressed, not a general list.
@@ -120,9 +126,9 @@ def check_pdf_metadata() -> list[str]:
     if TEX.exists():
         tex = TEX.read_text()
         if "pdfkeywords" not in tex:
-            out.append("anomaly_meaning.tex: no pdfkeywords in the preamble")
-        if not re.search(r"pdfauthor\s*=\s*\{\s*\}", tex):
-            out.append("anomaly_meaning.tex: pdfauthor is not set to empty")
+            out.append(f"{TEX.name}: no pdfkeywords in the preamble")
+        if not re.search(r"pdfauthor\s*=\s*\{\s*" + re.escape(AUTHOR) + r"\s*\}", tex):
+            out.append(f"{TEX.name}: pdfauthor is not set to {AUTHOR!r}")
     if PDF.exists():
         try:
             from pypdf import PdfReader
@@ -130,12 +136,12 @@ def check_pdf_metadata() -> list[str]:
             meta = PdfReader(str(PDF)).metadata or {}
             author = (meta.get("/Author") or "").strip()
             keywords = (meta.get("/Keywords") or "").strip()
-            if author:
-                out.append(f"anomaly_meaning.pdf: /Author is non-empty ({author!r})")
+            if author != AUTHOR:
+                out.append(f"{PDF.name}: /Author is {author!r}, expected {AUTHOR!r}")
             if not keywords:
-                out.append("anomaly_meaning.pdf: /Keywords is empty")
+                out.append(f"{PDF.name}: /Keywords is empty")
             if not out:
-                print(f"        pdf metadata: author empty, keywords set ({keywords[:40]}...)")
+                print(f"        pdf metadata: author {author!r}, keywords set ({keywords[:40]}...)")
         except ImportError:
             print("        pdf metadata: pypdf not installed, source check only")
     return out

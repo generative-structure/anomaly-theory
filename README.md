@@ -1,9 +1,13 @@
 # Replication materials
 
-Verification and build scripts for the manuscript *What an Anomaly Means*
-(anonymous submission), together with the bibliography and the preregistration
-that the frozen scorer commits against. No manuscript text, figures, or data
-are included.
+Verification and build scripts for the manuscript *What an Anomaly Means:
+Validity, Diagnosis, and the Limits of Semantic Identification*, together with
+the bibliography and the preregistration that the frozen scorer commits
+against. No manuscript text, figures, or data are included.
+
+Archived at Zenodo, DOI
+[10.5281/zenodo.21830924](https://doi.org/10.5281/zenodo.21830924), where the
+paper carries its authorship and affiliation.
 
 All paths are relative to the repository root, and every script resolves its
 inputs and outputs relative to its own location.
@@ -95,9 +99,14 @@ python paper/build_tex.py && latexmk -pdf paper/anomaly_theory.tex
 ```
 
 `build_tex.py` runs the style gate and the cross-reference check first and
-refuses to write the `.tex` on any violation. The generated preamble sets an
-empty `pdfauthor` and empty `pdfsubject`; `style_gate.py` verifies this in the
-generated source and, when `pypdf` is available, against the compiled PDF.
+refuses to write the `.tex` on any violation.
+
+The author block, affiliation and any corresponding-author footnote are not
+carried in this copy: `build_tex.py`'s preamble leaves `\author{}` and
+`pdfauthor={}` empty, and `style_gate.py`'s `AUTHOR` constant is empty to
+match. Set both to the author's name to build a named submission —
+`style_gate.py` then requires the compiled PDF to carry exactly that name, so
+losing attribution is a build failure rather than a silent omission.
 
 ## License
 
